@@ -1041,7 +1041,7 @@ const Rank = (() => {
   const GAS_DIRETO = typeof google !== 'undefined' && google.script && google.script.run;
   const gasRun = (fn, arg) => new Promise((res, rej) => { const r = google.script.run.withSuccessHandler(res).withFailureHandler(rej); arg === undefined ? r[fn]() : r[fn](arg); });
   /* GitHub Pages: o ranking fica na Planilha, pelo link "/exec" do App da Web (preenchido por montar_site.py) */
-  const RANKING_URL = '';
+  const RANKING_URL = 'https://script.google.com/macros/s/AKfycbxtYqf54LucQFd8j26Aa239efJ2Im9TUAgzmTqwrJ3s0TP22HpD-b0jZ-t1FQirpVgNaA/exec';
   const apiRun = async (fn, arg) => {
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 15000);
     try{
