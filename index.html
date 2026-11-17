@@ -1055,11 +1055,41 @@ const Rank = (() => {
   };
   const GAS = GAS_DIRETO || !!RANKING_URL;
   const call = GAS_DIRETO ? gasRun : apiRun;
+  /* Fila de gravações ainda não confirmadas pelo servidor (uma por família, guardada no computador).
+     Se o servidor estiver ocupado, o jogo tenta de novo sozinho, inclusive depois de "Novo jogo" ou de recarregar a página. */
+  const PKEY = 'missao-biomas-pendentes';
+  const fila = new Map();
+  try{ (JSON.parse(localStorage.getItem(PKEY)||'[]')||[]).forEach(e => e && e.id && fila.set(e.id, e)); }catch(e){}
+  const salvaFila = () => { try{ localStorage.setItem(PKEY, JSON.stringify([...fila.values()])); }catch(e){} };
+  const comFila = r => { const ids = new Set(fila.keys()); return r.filter(x => !ids.has(x.id)).concat([...fila.values()]); };
+  let enviando = false;
+  async function enviaFila(){
+    if(enviando || !fila.size) return;
+    enviando = true;
+    let tudoOk = true;
+    try{
+      for(const [id, e] of [...fila]){
+        let ok = false;
+        for(let t = 0; t < 4 && !ok; t++){
+          try{
+            const r = await call('salvarFamilia', e);
+            ok = true;
+            if(fila.get(id) === e){ fila.delete(id); salvaFila(); }
+            if(Array.isArray(r)){ rows = comFila(r); lastPull = Date.now(); }
+            clearTimeout(timer); mode = 'shared'; emit();
+          }catch(err){ await new Promise(res => setTimeout(res, 2000*(t+1) + Math.random()*2500)); }
+        }
+        if(!ok){ tudoOk = false; break; } /* servidor ocupado: tenta de novo na próxima atualização do ranking */
+      }
+    } finally { enviando = false; }
+    if(tudoOk && fila.size) enviaFila(); /* chegou pontuação nova enquanto enviava */
+  }
   let lastPull = 0;
   async function pull(){
     lastPull = Date.now();
-    try{ const r = await call('lerRanking'); rows = Array.isArray(r) ? r : []; clearTimeout(timer); mode = 'shared'; emit(); }
+    try{ const r = await call('lerRanking'); rows = comFila(Array.isArray(r) ? r : []); clearTimeout(timer); mode = 'shared'; emit(); }
     catch(e){ if(mode === 'loading'){ mode = 'slow'; emit(); } }
+    if(fila.size) enviaFila();
   }
   async function init(){
     if(GAS){
@@ -1083,14 +1113,10 @@ const Rank = (() => {
     if(!en.id || !en.familia) return;
     saveLocal(en);
     if(GAS){
-      pending = en;
-      queue = queue.then(async () => {
-        if(!pending) return; const e = pending; pending = null;
-        for(let t = 0; t < 2; t++){
-          try{ const r = await call('salvarFamilia', e); if(Array.isArray(r)) rows = r; mode = 'shared'; emit(); return; }
-          catch(err){ await new Promise(r => setTimeout(r, 1500 + Math.random()*1500)); }
-        }
-      });
+      fila.set(en.id, en); salvaFila();
+      rows = comFila(rows); emit();
+      /* pequeno atraso aleatório: espalha as gravações quando todos clicam em "Começar" juntos */
+      setTimeout(enviaFila, Math.random()*1500);
       return;
     }
     if(mode === 'local'){ rows = localRows(); emit(); return; }
