@@ -477,7 +477,7 @@ table.rk{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
         <p class="eyebrow"><span class="chip ok">Missão cumprida</span></p>
         <h2>Certificado de Guardiões dos Biomas</h2>
         <div class="who" id="cert-who">Equipe de guardiões</div>
-        <p>Por proteger a Amazônia, o Cerrado, a Caatinga, a Mata Atlântica, o Pantanal e o Pampa ao lado do Ameagle e da turma do 4º ano.</p>
+        <p>Por proteger a Mata Atlântica, a Amazônia, o Pantanal, o Pampa, o Cerrado e a Caatinga ao lado do Ameagle e da turma do 4º ano.</p>
         <div class="stats">
           <div class="stat"><small>Pontos</small><strong id="cert-pontos">0</strong></div>
           <div class="stat"><small>Estrelas</small><strong id="cert-estrelas">0/18</strong></div>
@@ -498,74 +498,177 @@ table.rk{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 <script>
 /* =====================================================================
    PERGUNTAS — edite aqui.
+   Todas saíram do roteiro "Expedição: os exploradores dos biomas do Brasil" (4º ano, 2026).
+   Cada bioma tem um BANCO de perguntas. A cada partida o jogo sorteia
+   POR_BIOMA_ABC perguntas A/B/C e POR_BIOMA_VF de Verdadeiro ou Falso,
+   embaralha a ordem delas e a ordem das alternativas.
    tipo "abc": opcoes = [A, B, C] e resposta = "A", "B" ou "C"
    tipo "vf" : resposta = "V" (verdadeiro) ou "F" (falso)
    explicacao: aparece depois que a família responde.
    ===================================================================== */
-const PERGUNTAS_DE_EXEMPLO = true;
+const PERGUNTAS_DE_EXEMPLO = false;
+const POR_BIOMA_ABC = 3, POR_BIOMA_VF = 1;   /* 4 perguntas por bioma, como antes */
 
 const BIOMAS = [
-  { id:'amazonia', nome:'Amazônia', genero:'a',
-    fala:'A Amazônia está pegando fogo! Ela é a maior floresta tropical do mundo e a casa de milhares de animais. Responda certo para apagar as chamas!',
-    desc:'Floresta gigante, quente e úmida, cortada por rios enormes. Guarda uma das maiores variedades de plantas e animais do planeta.',
-    fatos:[['Onde','Norte do Brasil'],['Bicho símbolo','Onça-pintada'],['Destaque','Rio Amazonas']],
-    perguntas:[
-      {tipo:'abc', texto:'Qual é a maior floresta tropical do mundo?', opcoes:['Mata Atlântica','Floresta Amazônica','Mata dos Cocais'], resposta:'B', explicacao:'A Floresta Amazônica é a maior floresta tropical do planeta e fica em vários países da América do Sul.'},
-      {tipo:'vf', texto:'As queimadas ajudam a Floresta Amazônica a crescer mais rápido.', resposta:'F', explicacao:'O fogo destrói árvores, mata animais e deixa o solo pobre. A floresta leva muitos anos para se recuperar.'},
-      {tipo:'abc', texto:'Qual rio atravessa a Amazônia e é um dos maiores do mundo?', opcoes:['Rio Amazonas','Rio São Francisco','Rio Tietê'], resposta:'A', explicacao:'O Rio Amazonas é o maior rio do mundo em volume de água.'},
-      {tipo:'abc', texto:'O que mais ameaça a Amazônia hoje?', opcoes:['O excesso de chuva','O desmatamento e as queimadas','A neve no inverno'], resposta:'B', explicacao:'Derrubar árvores e colocar fogo para abrir pastos e plantações são as maiores ameaças à floresta.'}
-    ]},
-  { id:'cerrado', nome:'Cerrado', genero:'o',
-    fala:'Agora o Cerrado! Aqui nascem rios importantes do Brasil. No tempo seco, uma faísca pode virar um incêndio enorme. Vamos proteger!',
-    desc:'Savana brasileira de árvores baixas e retorcidas, capim dourado e muitos cupinzeiros. Tem estação de chuva e estação seca.',
-    fatos:[['Onde','Centro do Brasil'],['Bicho símbolo','Lobo-guará'],['Destaque','Ipê-amarelo']],
-    perguntas:[
-      {tipo:'vf', texto:'O Cerrado é chamado de “caixa-d’água do Brasil” porque nele nascem rios importantes.', resposta:'V', explicacao:'Nascentes de grandes rios, como o São Francisco, ficam no Cerrado.'},
-      {tipo:'abc', texto:'Como são muitas árvores do Cerrado?', opcoes:['Têm tronco torto e casca grossa','São gigantes com folhas enormes','Não têm raízes'], resposta:'A', explicacao:'A casca grossa protege as árvores do calor e até de parte do fogo.'},
-      {tipo:'abc', texto:'Qual destes animais vive no Cerrado?', opcoes:['Pinguim','Lobo-guará','Urso-polar'], resposta:'B', explicacao:'O lobo-guará, de pernas compridas e pelo alaranjado, é um símbolo do Cerrado.'},
-      {tipo:'vf', texto:'Jogar bituca de cigarro ou soltar balão na época seca pode começar um incêndio.', resposta:'V', explicacao:'Com o capim seco, uma pequena brasa basta para o fogo se espalhar.'}
-    ]},
-  { id:'caatinga', nome:'Caatinga', genero:'a',
-    fala:'Chegamos à Caatinga, o bioma que só existe no Brasil. O desmatamento está deixando o solo sem proteção. Ajude!',
-    desc:'Região quente e seca, com plantas que guardam água, como os cactos. Na chuva, tudo fica verde de novo.',
-    fatos:[['Onde','Nordeste'],['Bicho símbolo','Asa-branca'],['Destaque','Mandacaru']],
-    perguntas:[
-      {tipo:'abc', texto:'A Caatinga existe somente em qual país?', opcoes:['Argentina','Brasil','Portugal'], resposta:'B', explicacao:'A Caatinga é o único bioma exclusivamente brasileiro.'},
-      {tipo:'abc', texto:'Qual planta é um símbolo da Caatinga?', opcoes:['Mandacaru','Araucária','Vitória-régia'], resposta:'A', explicacao:'O mandacaru é um cacto que guarda água e floresce mesmo na seca.'},
-      {tipo:'vf', texto:'O nome Caatinga vem do tupi e quer dizer “mata branca”.', resposta:'V', explicacao:'Na seca, muitas árvores perdem as folhas e a mata fica com cor clara, quase branca.'},
-      {tipo:'abc', texto:'Qual atitude ajuda a proteger a Caatinga?', opcoes:['Cortar árvores para lenha sem controle','Plantar árvores nativas e evitar queimadas','Caçar animais silvestres'], resposta:'B', explicacao:'Plantar espécies da própria região protege o solo e devolve abrigo aos animais.'}
-    ]},
   { id:'mata', nome:'Mata Atlântica', genero:'a',
-    fala:'A Mata Atlântica já perdeu boa parte das árvores. Cada resposta certa ajuda a cuidar do que restou!',
-    desc:'Floresta que acompanha o litoral, com serras, cachoeiras e muitas espécies que só existem aqui.',
-    fatos:[['Onde','Litoral do Brasil'],['Bicho símbolo','Mico-leão-dourado'],['Destaque','Pau-brasil']],
-    perguntas:[
-      {tipo:'vf', texto:'Hoje resta só uma pequena parte da Mata Atlântica original.', resposta:'V', explicacao:'Sobrou cerca de 12% da floresta original. O resto virou cidades, pastos e plantações.'},
-      {tipo:'abc', texto:'Qual animal ameaçado de extinção vive na Mata Atlântica?', opcoes:['Mico-leão-dourado','Camelo','Canguru'], resposta:'A', explicacao:'O mico-leão-dourado quase desapareceu e hoje é protegido em reservas.'},
-      {tipo:'abc', texto:'Onde fica a Mata Atlântica?', opcoes:['No meio do deserto','Ao longo do litoral brasileiro','Só dentro da Amazônia'], resposta:'B', explicacao:'Ela se estende pela costa, do Nordeste até o Sul do Brasil.'},
-      {tipo:'abc', texto:'O que fazer com o lixo numa trilha pela mata?', opcoes:['Esconder atrás das pedras','Enterrar na terra','Levar de volta e jogar no lixo certo'], resposta:'C', explicacao:'Lixo deixado na mata machuca animais e polui rios e nascentes.'}
+    fala:'Psiu… estão ouvindo os pássaros? Chegamos à Mata Atlântica, o primeiro bioma da expedição! Respondam certo para proteger as árvores gigantes.',
+    desc:'Floresta verde de árvores gigantes que cobrem a terra, fazem sombra e deixam o solo úmido. Fica em parte do litoral do Brasil.',
+    fatos:[['Onde','Do RN ao RS, no litoral'],['Bicho símbolo','Mico-leão-dourado'],['Em inglês','Atlantic Forest']],
+    banco:[
+      {tipo:'abc', texto:'Onde está localizada a Mata Atlântica?', opcoes:['No centro do Brasil','Em parte do litoral do Brasil','Só no Rio Grande do Sul'], resposta:'B', explicacao:'A Mata Atlântica está localizada em parte do litoral do Brasil.'},
+      {tipo:'abc', texto:'A Mata Atlântica vai de qual estado até qual estado?', opcoes:['Do Rio Grande do Norte ao Rio Grande do Sul','Do Amazonas à Bahia','De Goiás a Minas Gerais'], resposta:'A', explicacao:'Ela vai do Rio Grande do Norte até o Rio Grande do Sul.'},
+      {tipo:'abc', texto:'De norte a sul, a Mata Atlântica se estende por cerca de quantos quilômetros?', opcoes:['250 km','2.500 km','25.000 km'], resposta:'B', explicacao:'Ela se estende por cerca de 2.500 quilômetros de norte a sul.'},
+      {tipo:'abc', texto:'Qual animal que só existe no Brasil a expedição encontrou na Mata Atlântica?', opcoes:['Lobo-guará','Tatu-bola','Mico-leão-dourado'], resposta:'C', explicacao:'O mico-leão-dourado vive na Mata Atlântica e só existe no Brasil.'},
+      {tipo:'abc', texto:'Como se diz “mico-leão-dourado” em inglês?', opcoes:['Golden lion tamarin','Maned wolf','Capybara'], resposta:'A', explicacao:'Mico-leão-dourado em inglês é golden lion tamarin.'},
+      {tipo:'abc', texto:'Como a expedição chamou a Mata Atlântica em inglês?', opcoes:['Amazon Forest','Atlantic Forest','Golden Forest'], resposta:'B', explicacao:'“We arrived at the Atlantic Forest!”: Mata Atlântica em inglês é Atlantic Forest.'},
+      {tipo:'abc', texto:'Como fica o solo da Mata Atlântica, por causa da sombra das árvores?', opcoes:['Úmido','Seco e rachado','Coberto de areia'], resposta:'A', explicacao:'As árvores gigantes fazem sombra e deixam o solo úmido.'},
+      {tipo:'abc', texto:'Que som a equipe ouviu ao chegar na Mata Atlântica?', opcoes:['O canto dos pássaros','O barulho das ondas','O vento no campo'], resposta:'A', explicacao:'“Estão ouvindo os pássaros?”: a chegada tinha sons de aves da Mata Atlântica.'},
+      {tipo:'abc', texto:'Em qual reserva a turma fez a aula de campo na Mata Atlântica?', opcoes:['Reserva Aparauá','Reserva do Pantanal','Reserva da Caatinga'], resposta:'A', explicacao:'Na visita à Reserva Aparauá, a turma viu árvores enormes numa trilha no meio da mata.'},
+      {tipo:'abc', texto:'A Mata Atlântica foi qual parada da expedição?', opcoes:['A primeira','A última','A terceira'], resposta:'A', explicacao:'“Sim, chegamos ao primeiro bioma.” A expedição começou pela Mata Atlântica.'},
+      {tipo:'vf', texto:'Na Reserva Aparauá, a turma viu árvores enormes e altíssimas numa trilha no meio da mata.', resposta:'V', explicacao:'Foi um dia incrível na aula de campo, com árvores enormes e altíssimas.'},
+      {tipo:'vf', texto:'O mico-leão-dourado é um animal que só existe no Brasil.', resposta:'V', explicacao:'A expedição contou que ele é um dos animais que só existem aqui no Brasil.'},
+      {tipo:'vf', texto:'As árvores gigantes da Mata Atlântica deixam o clima perfeito para a vida de várias espécies.', resposta:'V', explicacao:'A sombra e o solo úmido criam o clima perfeito para muitas espécies.'},
+      {tipo:'vf', texto:'A Mata Atlântica tem árvores baixas, de troncos tortos e casca grossa.', resposta:'F', explicacao:'Esse é o Cerrado. A Mata Atlântica tem árvores gigantes que cobrem a terra.'},
+      {tipo:'vf', texto:'A Mata Atlântica fica bem no centro do Brasil, longe do mar.', resposta:'F', explicacao:'Ela fica em parte do litoral, do Rio Grande do Norte ao Rio Grande do Sul.'},
+      {tipo:'vf', texto:'A Mata Atlântica foi o último bioma visitado pela expedição.', resposta:'F', explicacao:'Ela foi o primeiro bioma da expedição.'}
+    ]},
+  { id:'amazonia', nome:'Amazônia', genero:'a',
+    fala:'Olhem para o alto: o céu quase sumiu de tanta árvore! Mas o QG avisou que a Amazônia está em perigo por causa do desmatamento. Vamos salvá-la!',
+    desc:'A imensa floresta verde, lar de muitas espécies da fauna e da flora e dos povos indígenas que cuidam dela. Suas árvores purificam o ar.',
+    fatos:[['Apelido','Pulmão do mundo'],['Quem cuida','Povos indígenas'],['Em inglês','Amazon Forest']],
+    banco:[
+      {tipo:'abc', texto:'Por que o céu “quase sumiu” quando a equipe entrou na Amazônia?', opcoes:['Por causa de uma tempestade','Por causa de tanta árvore','Por causa da fumaça'], resposta:'B', explicacao:'“O céu quase sumiu de tanta árvore!” A Amazônia é imensa.'},
+      {tipo:'abc', texto:'Segundo o aviso do QG, por que a Amazônia está em perigo?', opcoes:['Por causa do desmatamento','Por causa da neve','Por causa do excesso de gado no campo'], resposta:'A', explicacao:'O QG avisou que essa imensidão verde está em perigo por causa do desmatamento.'},
+      {tipo:'abc', texto:'Que apelido a expedição deu à Amazônia?', opcoes:['Berçário do mar','Jardim mágico','Pulmão do mundo'], resposta:'C', explicacao:'“Vocês sabiam que a Amazônia é o pulmão do mundo?”'},
+      {tipo:'abc', texto:'O que a Amazônia produz para a gente conseguir respirar?', opcoes:['Oxigênio','Areia','Sal'], resposta:'A', explicacao:'Ela produz oxigênio para a gente conseguir respirar.'},
+      {tipo:'abc', texto:'O que as árvores da Amazônia fazem com o ar?', opcoes:['Deixam o ar mais quente','Purificam o ar','Espalham fumaça'], resposta:'B', explicacao:'As árvores purificam o ar e garantem a nossa sobrevivência.'},
+      {tipo:'abc', texto:'Além de muitos animais e plantas, quem tem a Amazônia como lar e cuida dela?', opcoes:['Os povos indígenas','Os poetas do Pantanal','Os exploradores da expedição'], resposta:'A', explicacao:'A Amazônia é o lar dos povos indígenas que vivem no meio da floresta e cuidam do bioma.'},
+      {tipo:'abc', texto:'Qual brincadeira musical a turma ensinou à plateia na Amazônia?', opcoes:['Carcará','Baião do Cerrado','Yapo'], resposta:'C', explicacao:'A turma ensinou a brincadeira musical Yapo, com percussão corporal.'},
+      {tipo:'abc', texto:'Como a expedição chamou a Floresta Amazônica em inglês?', opcoes:['Amazon Forest','Atlantic Forest','Green Forest'], resposta:'A', explicacao:'“We need to save the Amazon Forest!”'},
+      {tipo:'abc', texto:'Por causa do seu tamanho, a Amazônia é o lar de quê?', opcoes:['Só de peixes','De muitas espécies da fauna e da flora','De nenhum animal'], resposta:'B', explicacao:'Por ser tão grande, a Amazônia abriga muitas espécies da fauna e da flora brasileira.'},
+      {tipo:'abc', texto:'Que frase em inglês a equipe usou para defender a Amazônia?', opcoes:['Get your water bottle!','We need to save the Amazon Forest!','Water brings life everywhere!'], resposta:'B', explicacao:'“We need to save the Amazon Forest!” quer dizer “Precisamos salvar a Floresta Amazônica!”'},
+      {tipo:'vf', texto:'Segundo a expedição, se a Amazônia sofre, o clima do mundo inteiro muda.', resposta:'V', explicacao:'“If the Amazon suffers, the entire global climate changes!”'},
+      {tipo:'vf', texto:'Na brincadeira Yapo, as crianças ensinam movimentos de percussão corporal.', resposta:'V', explicacao:'Os movimentos são ensinados devagar e todos fazem juntos, ao som da música.'},
+      {tipo:'vf', texto:'A expedição disse que a importância da Amazônia deve ser espalhada para o mundo todo.', resposta:'V', explicacao:'“Devemos espalhar essa notícia para o mundo todo.”'},
+      {tipo:'vf', texto:'A Amazônia é pequena e tem poucas espécies de animais e plantas.', resposta:'F', explicacao:'Ela é imensa e, por causa do seu tamanho, é o lar de muitas espécies.'},
+      {tipo:'vf', texto:'O desmatamento não é um problema para a Amazônia.', resposta:'F', explicacao:'O desmatamento coloca essa imensidão verde em perigo.'},
+      {tipo:'vf', texto:'Na expedição, a Amazônia foi chamada de “berçário do mar”.', resposta:'F', explicacao:'A Amazônia foi chamada de pulmão do mundo. O berçário é o manguezal.'}
     ]},
   { id:'pantanal', nome:'Pantanal', genero:'o',
-    fala:'O Pantanal é a maior área alagada do planeta, mas na seca o fogo se espalha muito rápido. Vamos lá!',
-    desc:'Planície que fica cheia de água em parte do ano. É um dos melhores lugares do mundo para ver animais soltos na natureza.',
-    fatos:[['Onde','MT e MS'],['Bicho símbolo','Tuiuiú'],['Destaque','Jacaré-do-pantanal']],
-    perguntas:[
-      {tipo:'abc', texto:'Qual é a principal característica do Pantanal?', opcoes:['Fica coberto de neve','Fica alagado em parte do ano','Não tem nenhum animal'], resposta:'B', explicacao:'Na época das chuvas, os rios transbordam e alagam grande parte da planície.'},
-      {tipo:'abc', texto:'Qual ave é o símbolo do Pantanal?', opcoes:['Tuiuiú','Pinguim','Avestruz'], resposta:'A', explicacao:'O tuiuiú é uma ave grande, de pescoço preto e uma faixa vermelha.'},
-      {tipo:'vf', texto:'Os grandes incêndios de 2020 queimaram cerca de um quarto do Pantanal.', resposta:'V', explicacao:'Foi uma das piores tragédias do bioma: milhões de animais foram atingidos.'},
-      {tipo:'abc', texto:'Qual destes animais é muito comum no Pantanal?', opcoes:['Jacaré','Urso-panda','Foca'], resposta:'A', explicacao:'O Pantanal tem uma das maiores populações de jacarés do mundo.'}
+    fala:'Blue Team em ação: chegamos remando ao Pantanal! Aqui tem água por todo lado, mas o bioma sofre com o fogo e a falta d’água. Ajudem!',
+    desc:'Muita água, que parece um mar doce e reflete o céu como um espelho, e terra seca em alguns pontos. Jacarés, capivaras e tuiuiús vivem aqui.',
+    fatos:[['Paisagem','Água por todo lado'],['Bichos','Jacaré, capivara, tuiuiú'],['Poeta','Manoel de Barros']],
+    banco:[
+      {tipo:'abc', texto:'O que a equipe viu por todo lado ao chegar no Pantanal?', opcoes:['Areia','Água','Neve'], resposta:'B', explicacao:'“Look around, there is water everywhere!”: tem água por todo lado.'},
+      {tipo:'abc', texto:'Com o que a água do Pantanal foi comparada?', opcoes:['Um mar doce que reflete o céu como um espelho','Um tapete verde de grama macia','Um campo dourado'], resposta:'A', explicacao:'Parece um mar doce que reflete o céu azul e as nuvens como um espelho.'},
+      {tipo:'abc', texto:'Quais animais a equipe viu no Pantanal?', opcoes:['Tatu-bola, cascavel e carcará','Cavalos selvagens, veado-campeiro e ema','Jacarés, capivaras e tuiuiús'], resposta:'C', explicacao:'Jacarés na margem do rio, capivaras nadando e tuiuiús gigantes voando.'},
+      {tipo:'abc', texto:'O que quer dizer “alligator”, palavra usada no Pantanal?', opcoes:['Jacaré','Capivara','Tuiuiú'], resposta:'A', explicacao:'“Alligators, tuiuius and capybaras!”: alligator é jacaré.'},
+      {tipo:'abc', texto:'Como se diz “capivaras” em inglês?', opcoes:['Alligators','Capybaras','Tuiuius'], resposta:'B', explicacao:'Capivara em inglês é capybara.'},
+      {tipo:'abc', texto:'Com o que o Pantanal sofre, segundo a expedição?', opcoes:['Com a neve e o frio','Com o excesso de gado','Com o fogo e a falta d’água'], resposta:'C', explicacao:'O Pantanal sofre com o fogo e a falta d’água.'},
+      {tipo:'abc', texto:'Como os tuiuiús foram descritos no Pantanal?', opcoes:['Gigantes, voando majestosos','Pequenos e escondidos no capim','Correndo ligeiro pelo campo'], resposta:'A', explicacao:'Tuiuiús gigantes voando majestosos.'},
+      {tipo:'abc', texto:'Qual dança da apresentação foi inspirada na obra de Manoel de Barros?', opcoes:['Baião do Cerrado','O Idioma das Árvores','Yapo'], resposta:'B', explicacao:'A dança “O Idioma das Árvores” usa música de Márcio de Camillo baseada na obra de Manoel de Barros.'},
+      {tipo:'abc', texto:'Qual dom a exploradora queria ter para ouvir as histórias do Pantanal?', opcoes:['Voar como o tuiuiú','Nadar como a capivara','Entender o idioma das árvores'], resposta:'C', explicacao:'Ela queria entender o idioma das árvores para ouvir as histórias guardadas no Pantanal.'},
+      {tipo:'abc', texto:'O que a exploradora tinha aprendido nas aulas de inglês e lembrou no Pantanal?', opcoes:['O que é uma enchente (flood)','O que é uma seca (drought)','O que é um berçário (nursery)'], resposta:'A', explicacao:'“In my English classes I learned about what a flood is.” Flood é enchente.'},
+      {tipo:'abc', texto:'O que quer dizer “Water brings life everywhere!”?', opcoes:['A água acabou!','A água leva vida a todo lugar!','A água é perigosa!'], resposta:'B', explicacao:'A água leva vida a todo lugar. Sem ela, o bioma chora.'},
+      {tipo:'vf', texto:'O poeta Manoel de Barros criou versos admirando a paisagem do Pantanal.', resposta:'V', explicacao:'O Pantanal inspira muitos poetas, como Manoel de Barros.'},
+      {tipo:'vf', texto:'Pequenas ações, como limpar os rios e proteger a natureza, ajudam muito o Pantanal.', resposta:'V', explicacao:'“Even small actions, like cleaning rivers and protecting nature, help a lot.”'},
+      {tipo:'vf', texto:'Segundo a expedição, sem água o Pantanal “chora”.', resposta:'V', explicacao:'A água traz vida a todo lugar. Sem ela, o bioma chora.'},
+      {tipo:'vf', texto:'No Pantanal só existe água: não há nenhum ponto de terra seca.', resposta:'F', explicacao:'Tem muita água, mas também existe terra seca em alguns pontos.'},
+      {tipo:'vf', texto:'O Pantanal não tem nenhum problema com fogo.', resposta:'F', explicacao:'O Pantanal sofre com o fogo e a falta d’água.'},
+      {tipo:'vf', texto:'Os jacarés estavam descansando na margem do rio.', resposta:'V', explicacao:'A equipe viu jacarés descansando na margem e capivaras nadando calmamente.'}
     ]},
   { id:'pampa', nome:'Pampa', genero:'o',
-    fala:'Último bioma: o Pampa, com seus campos sem fim. Proteja os campos e os animais que vivem aqui!',
-    desc:'Campos abertos e coxilhas cobertos de capim, com poucas árvores. É a paisagem típica do Sul do Brasil.',
-    fatos:[['Onde','Rio Grande do Sul'],['Bicho símbolo','Quero-quero'],['Destaque','Campos nativos']],
-    perguntas:[
-      {tipo:'abc', texto:'Em qual estado brasileiro fica o Pampa?', opcoes:['Rio Grande do Sul','Bahia','Amazonas'], resposta:'A', explicacao:'No Brasil, o Pampa existe só no Rio Grande do Sul.'},
-      {tipo:'abc', texto:'Qual é a vegetação mais comum no Pampa?', opcoes:['Campos de capim','Florestas fechadas','Cactos'], resposta:'A', explicacao:'O Pampa é formado principalmente por campos, com capins e flores do campo.'},
-      {tipo:'vf', texto:'O Pampa também ocupa partes do Uruguai e da Argentina.', resposta:'V', explicacao:'O Pampa atravessa fronteiras e é compartilhado com nossos vizinhos.'},
-      {tipo:'vf', texto:'Trocar o campo nativo por plantações sem cuidado não traz problema nenhum para o Pampa.', resposta:'F', explicacao:'Quando o campo nativo some, muitas plantas e animais perdem sua casa.'}
+    fala:'Puxa vida, que ventinho gostoso! Chegamos aos Pampas. As plantações e o excesso de gado estão mudando essa paisagem. Vamos cuidar dela!',
+    desc:'Horizonte plano e aberto: um tapete verde de grama macia que se perde de vista sob um céu enorme.',
+    fatos:[['Paisagem','Campos planos e abertos'],['Bichos','Cavalo, veado-campeiro, ema'],['Em inglês','Open fields']],
+    banco:[
+      {tipo:'abc', texto:'O que a equipe sentiu ao chegar nos Pampas?', opcoes:['Um calor muito forte','Uma chuva forte','Um ventinho gostoso'], resposta:'C', explicacao:'“Puxa vida, que ventinho gostoso! Chegamos aos Pampas.”'},
+      {tipo:'abc', texto:'Como é o horizonte dos Pampas?', opcoes:['Plano e aberto','Cheio de montanhas','Escondido por árvores gigantes'], resposta:'A', explicacao:'Um horizonte plano e aberto que se perde de vista.'},
+      {tipo:'abc', texto:'Com o que a vegetação dos Pampas foi comparada?', opcoes:['Um jardim mágico e secreto','Um tapete verde de grama macia','Um espelho de água'], resposta:'B', explicacao:'Um tapete verde de grama macia sob um céu enorme.'},
+      {tipo:'abc', texto:'Quais animais a equipe viu correndo ligeiro nos Pampas?', opcoes:['Cavalos selvagens, veado-campeiro e ema','Jacarés, capivaras e tuiuiús','Lobo-guará e onça-pintada'], resposta:'A', explicacao:'Cavalos selvagens, o veado-campeiro e a ema graciosa.'},
+      {tipo:'abc', texto:'Segundo a expedição, o que está mudando a paisagem dos Pampas?', opcoes:['A neve e o gelo','As ondas do mar','As plantações e o excesso de gado'], resposta:'C', explicacao:'As plantações e o excesso de gado estão mudando essa paisagem pura.'},
+      {tipo:'abc', texto:'Quem usa os campos dos Pampas para descansar?', opcoes:['Os jacarés do rio','Passarinhos que vêm de longe','Os caranguejos bebês'], resposta:'B', explicacao:'Até passarinhos que vêm de longe usam esses campos para descansar.'},
+      {tipo:'abc', texto:'O que significa “open fields”, expressão usada nos Pampas?', opcoes:['Campos abertos','Florestas fechadas','Rios gigantes'], resposta:'A', explicacao:'“Lowlands and open fields”: terras baixas e campos abertos.'},
+      {tipo:'abc', texto:'Qual frase em inglês a expedição disse nos Pampas?', opcoes:['We need to save the Amazon Forest!','Get your water bottle!','We are responsible for all of it!'], resposta:'C', explicacao:'“We are responsible for all of it!”: nós somos responsáveis por tudo isso!'},
+      {tipo:'abc', texto:'O que a expedição disse que precisamos valorizar nos Pampas?', opcoes:['As tradições dos habitantes que cuidam bem da terra','O excesso de gado','As plantações sem fim'], resposta:'A', explicacao:'Precisamos valorizar as tradições dos habitantes deste bioma, que cuidam bem desta terra.'},
+      {tipo:'abc', texto:'Como a ema foi descrita nos Pampas?', opcoes:['Feroz','Graciosa','Escondida no capim'], resposta:'B', explicacao:'A equipe viu correndo ligeiro a ema graciosa.'},
+      {tipo:'vf', texto:'Nos Pampas, a água corre pelos campos e sustenta a vida.', resposta:'V', explicacao:'“Water flows through the fields and sustains life!”'},
+      {tipo:'vf', texto:'A ema e o veado-campeiro foram vistos nos Pampas.', resposta:'V', explicacao:'Junto com os cavalos selvagens, correndo ligeiro.'},
+      {tipo:'vf', texto:'Para o horizonte dos Pampas continuar belo, precisamos cuidar desse bioma.', resposta:'V', explicacao:'“Para continuar assim precisamos cuidar deste bioma.”'},
+      {tipo:'vf', texto:'Os Pampas são cobertos por árvores gigantes que escondem o céu.', resposta:'F', explicacao:'Os Pampas têm horizonte plano e aberto, com grama macia sob um céu enorme.'},
+      {tipo:'vf', texto:'O excesso de gado ajuda a manter a paisagem dos Pampas pura.', resposta:'F', explicacao:'As plantações e o excesso de gado estão mudando essa paisagem.'}
+    ]},
+  { id:'cerrado', nome:'Cerrado', genero:'o',
+    fala:'Entramos no Cerrado, bem no centro do Brasil! Com tantas fazendas crescendo, ele está mudando rápido. Vamos proteger o Cerrado!',
+    desc:'Árvores de troncos tortos e retorcidos, cascas grossas e um campo dourado que brilha sob o sol forte. Parece um jardim mágico e secreto!',
+    fatos:[['Onde','Centro do Brasil'],['Bicho símbolo','Lobo-guará'],['Tamanho','2º maior bioma']],
+    banco:[
+      {tipo:'abc', texto:'Como são as árvores do Cerrado?', opcoes:['Gigantes, fazendo muita sombra','Troncos tortos e retorcidos, com cascas grossas','Cheias de espinhos e galhos secos'], resposta:'B', explicacao:'Árvores com troncos tortos e retorcidos e cascas grossas.'},
+      {tipo:'abc', texto:'Qual é a posição do Cerrado entre os maiores biomas do Brasil?', opcoes:['O maior','O segundo maior','O menor'], resposta:'B', explicacao:'“The second largest biome in Brazil!”: o segundo maior bioma do Brasil.'},
+      {tipo:'abc', texto:'Onde está localizado o Cerrado?', opcoes:['No litoral, perto do mar','No extremo sul do Brasil','Bem no centro do Brasil'], resposta:'C', explicacao:'O Cerrado está bem no centro do Brasil.'},
+      {tipo:'abc', texto:'Qual animal elegante, de pernas compridas, se esconde no capim do Cerrado?', opcoes:['Lobo-guará','Veado-campeiro','Tatu-bola'], resposta:'A', explicacao:'O elegante lobo-guará, de pernas compridas.'},
+      {tipo:'abc', texto:'Como se diz “lobo-guará” em inglês?', opcoes:['Golden lion tamarin','Maned wolf','Alligator'], resposta:'B', explicacao:'Lobo-guará em inglês é maned wolf.'},
+      {tipo:'abc', texto:'O que fica debaixo da terra, no Cerrado?', opcoes:['As maiores reservas subterrâneas de água','Um mar de lama','Muita neve congelada'], resposta:'A', explicacao:'No Cerrado estão as maiores reservas subterrâneas de água.'},
+      {tipo:'abc', texto:'O que está fazendo o Cerrado mudar rápido?', opcoes:['A água do mar','Tantas fazendas crescendo','O frio intenso'], resposta:'B', explicacao:'Com tantas fazendas crescendo, o Cerrado está mudando rápido.'},
+      {tipo:'abc', texto:'Com o que a paisagem do Cerrado foi comparada?', opcoes:['Um mar doce','Um berçário natural','Um jardim mágico e secreto'], resposta:'C', explicacao:'“Parece um jardim mágico e secreto!”'},
+      {tipo:'abc', texto:'Qual dança a turma apresentou para celebrar o Cerrado?', opcoes:['Baião do Cerrado','O Idioma das Árvores','Yapo'], resposta:'A', explicacao:'A turma cantou e dançou o Baião do Cerrado, celebrando as cores, as veredas e os animais.'},
+      {tipo:'abc', texto:'Que pergunta a expedição fez sobre o Cerrado?', opcoes:['Como fazer nevar no Cerrado?','Como plantar sem prejudicar a paisagem?','Como secar os rios?'], resposta:'B', explicacao:'“How can we grow crops without harming the landscape?”'},
+      {tipo:'vf', texto:'O Cerrado abriga a savana com a maior biodiversidade do planeta.', resposta:'V', explicacao:'A savana com a maior biodiversidade do planeta fica no Cerrado.'},
+      {tipo:'vf', texto:'A poderosa onça-pintada também vive no Cerrado.', resposta:'V', explicacao:'Entre os capins se escondem o lobo-guará e a poderosa onça-pintada.'},
+      {tipo:'vf', texto:'Por ficar no centro do Brasil, o Cerrado faz uma conexão entre alguns biomas.', resposta:'V', explicacao:'Ele fica bem no centro do Brasil e se torna uma conexão entre alguns biomas.'},
+      {tipo:'vf', texto:'Plantar árvores nativas e respeitar a natureza não faz diferença para o Cerrado.', resposta:'F', explicacao:'“Even planting native trees and respecting nature can make a big difference.”'},
+      {tipo:'vf', texto:'O Cerrado é o maior bioma do Brasil.', resposta:'F', explicacao:'O Cerrado é o segundo maior bioma do Brasil.'},
+      {tipo:'vf', texto:'O lobo-guará tem pernas bem curtinhas.', resposta:'F', explicacao:'O lobo-guará é elegante e tem pernas compridas.'}
+    ]},
+  { id:'caatinga', nome:'Caatinga', genero:'a',
+    fala:'Que calor! Peguem a garrafinha de água! Chegamos à Caatinga. A seca brava e o desmatamento ameaçam esse tesouro. Mostrem a força deste lugar!',
+    desc:'Terra muito seca, com plantas cheias de espinhos e árvores de galhos secos que guardam uma força impressionante. A vida aqui é muito corajosa!',
+    fatos:[['Clima','Muito quente e seco'],['Bichos','Tatu-bola, cascavel, carcará'],['Em inglês','Drought = seca']],
+    banco:[
+      {tipo:'abc', texto:'Como é a terra da Caatinga?', opcoes:['Sempre alagada','Muito seca','Coberta de lama'], resposta:'B', explicacao:'A Caatinga tem uma terra muito seca.'},
+      {tipo:'abc', texto:'Como são as plantas da Caatinga?', opcoes:['Cheias de espinhos, com galhos secos','Com troncos tortos e cascas grossas','Gigantes, que escondem o céu'], resposta:'A', explicacao:'Plantas cheias de espinhos e árvores com galhos secos.'},
+      {tipo:'abc', texto:'Quais animais vivem na Caatinga, segundo a expedição?', opcoes:['Mico-leão-dourado e capivara','Ema e veado-campeiro','Tatu-bola, cascavel e carcará'], resposta:'C', explicacao:'O tatu-bola, a cascavel e o carcará voando alto no céu azul.'},
+      {tipo:'abc', texto:'Qual ave voa alto no céu da Caatinga e dá nome a uma música da apresentação?', opcoes:['Carcará','Tuiuiú','Ema'], resposta:'A', explicacao:'Todos juntos: “Carcaraaaaaaa!”. A turma cantou e dançou a música Carcará.'},
+      {tipo:'abc', texto:'O que ameaça a Caatinga?', opcoes:['O excesso de chuva','A seca brava e o desmatamento','A neve'], resposta:'B', explicacao:'A seca brava e o desmatamento ameaçam esse tesouro.'},
+      {tipo:'abc', texto:'O que quer dizer “drought”, um problema da Caatinga?', opcoes:['Enchente','Vento','Seca'], resposta:'C', explicacao:'“Drought is a problem”: drought é seca.'},
+      {tipo:'abc', texto:'Ao chegar na Caatinga, o que a exploradora pediu para pegar?', opcoes:['A garrafinha de água','O casaco','O guarda-chuva'], resposta:'A', explicacao:'“Wow, it is very hot! Get your water bottle!”'},
+      {tipo:'abc', texto:'Como é o clima na Caatinga, segundo a equipe?', opcoes:['Frio, com neve','Muito quente','Com um ventinho gostoso'], resposta:'B', explicacao:'“Wow, it is very hot!”: na Caatinga faz muito calor.'},
+      {tipo:'abc', texto:'Qual destes animais NÃO foi citado na Caatinga?', opcoes:['Tatu-bola','Cascavel','Capivara'], resposta:'C', explicacao:'A capivara apareceu no Pantanal. Na Caatinga estão o tatu-bola, a cascavel e o carcará.'},
+      {tipo:'vf', texto:'Mesmo com a paisagem seca, existe muita vida na Caatinga.', resposta:'V', explicacao:'“Quem diria que por trás desta paisagem seca existe tanta vida?”'},
+      {tipo:'vf', texto:'Na Caatinga, a natureza surpreende com vida que vence a falta de água e o calor.', resposta:'V', explicacao:'A natureza surpreende com tanta vida que vence a falta de água e o calor.'},
+      {tipo:'vf', texto:'A paisagem da Caatinga é bem diferente da dos outros biomas.', resposta:'V', explicacao:'“A paisagem é bem diferente dos outros biomas.”'},
+      {tipo:'vf', texto:'A expedição disse que a vida na Caatinga é muito corajosa.', resposta:'V', explicacao:'“Drought is a problem, mas a vida aqui é muito corajosa!”'},
+      {tipo:'vf', texto:'As árvores de galhos secos da Caatinga são fracas e não têm força nenhuma.', resposta:'F', explicacao:'Elas guardam uma força impressionante.'},
+      {tipo:'vf', texto:'Na Caatinga chove demais, por isso a equipe pediu menos água.', resposta:'F', explicacao:'A equipe pediu mais água: “we need more water in this biome!”'}
     ]}
 ];
+
+/* Sorteio: cada computador percorre o banco inteiro antes de repetir uma pergunta */
+const BKEY = 'missao-biomas-baralho';
+function embaralha(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function tiraDoBaralho(chave, idxs, n){
+  let bar = {}; try{ bar = JSON.parse(localStorage.getItem(BKEY)||'{}') || {}; }catch(e){}
+  let fila = (Array.isArray(bar[chave]) ? bar[chave] : []).filter(i => idxs.includes(i));
+  const out = [];
+  while(out.length < n){
+    if(!fila.length) fila = embaralha(idxs).filter(i => !out.includes(i));
+    if(!fila.length) break;
+    out.push(fila.shift());
+  }
+  bar[chave] = fila; try{ localStorage.setItem(BKEY, JSON.stringify(bar)); }catch(e){}
+  return out;
+}
+function sorteiaPerguntas(b){
+  const abc = [], vf = [];
+  b.banco.forEach((q,i) => (q.tipo==='vf' ? vf : abc).push(i));
+  const ids = [...tiraDoBaralho(b.id+':abc', abc, POR_BIOMA_ABC), ...tiraDoBaralho(b.id+':vf', vf, POR_BIOMA_VF)];
+  return embaralha(ids).map(i => {
+    const q = b.banco[i];
+    if(q.tipo !== 'abc') return q;
+    const certa = q.opcoes['ABC'.indexOf(q.resposta)], ops = embaralha(q.opcoes);
+    return { ...q, opcoes:ops, resposta:'ABC'[ops.indexOf(certa)] };
+  });
+}
 
 /* Pontuação */
 const PONTOS_1A = 100, PONTOS_2A = 50, META = 0.6;   /* se mudar, ajuste também o Code.gs */
@@ -1237,7 +1340,8 @@ $('#btn-mapa').addEventListener('click', () => { Sfx.click(); openMap(); });
 /* ----- bioma ----- */
 function startBiome(i){
   const b=BIOMAS[i];
-  run = { i, b, qi:-1, tent:1, pontos:0, max:b.perguntas.length*PONTOS_1A, done:false };
+  const qs = sorteiaPerguntas(b);
+  run = { i, b, qs, qi:-1, tent:1, pontos:0, max:qs.length*PONTOS_1A, done:false };
   Scene.set(b.id); Scene.setFire(1,true); Scene.bloom(0); Scene.confetti(false);
   show('play'); setPose('play','guia'); hud();
   say('#mb-bubble-play', b.fala);
@@ -1252,7 +1356,7 @@ function startBiome(i){
 }
 function restartCard(){ const c=$('#mb-card'); c.style.animation='none'; void c.offsetWidth; c.style.animation=''; }
 function hud(){
-  const b=run.b, n=b.perguntas.length, pct=run.pontos/run.max;
+  const b=run.b, n=run.qs.length, pct=run.pontos/run.max;
   $('#hud-bioma').textContent=b.nome;
   $('#hud-q').textContent= run.qi<0 ? `${n} perguntas` : `Pergunta ${Math.min(run.qi+1,n)} de ${n}`;
   $('#meter-fill').style.width=(pct*100)+'%';
@@ -1264,7 +1368,7 @@ function hud(){
 }
 function nextQ(){
   run.qi++; run.tent=1; run.done=false;
-  if(run.qi>=run.b.perguntas.length) return finish();
+  if(run.qi>=run.qs.length) return finish();
   hud(); renderQ(); setPose('play','pensando'); say('#mb-bubble-play', pick(FALAS.pensar));
 }
 const LETRAS=['A','B','C'], CORES=['#bfe9ff','#fff1a8','#ffd1e6'];
@@ -1288,7 +1392,7 @@ function startTimer(){
 function respostaCerta(q){ return q.tipo==='vf' ? (q.resposta==='V'?'Verdadeiro':'Falso') : `${q.resposta}) ${q.opcoes[LETRAS.indexOf(q.resposta)]}`; }
 function tempoEsgotado(){
   if(!run || run.done || current!=='play') return;
-  const q=run.b.perguntas[run.qi]; run.done=true;
+  const q=run.qs[run.qi]; run.done=true;
   $$('#mb-card .opt').forEach(b=>{ b.disabled=true; if(b.dataset.k===q.resposta) b.classList.add('right'); else b.classList.add('dim'); });
   Sfx.erro(); Scene.flare(); setPose('play','triste'); say('#mb-bubble-play','O tempo acabou! Vejam a resposta certa e vamos para a próxima.');
   feedback('miss', `<b>O tempo acabou!</b> A resposta certa era <b>${esc(respostaCerta(q))}</b>. ${esc(q.explicacao||'')}`);
@@ -1297,7 +1401,7 @@ function tempoEsgotado(){
 const checkSVG='<svg viewBox="0 0 24 24" fill="none" stroke="#16225e" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const xSVG='<svg viewBox="0 0 24 24" fill="none" stroke="#16225e" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 function renderQ(){
-  const q=run.b.perguntas[run.qi], n=run.b.perguntas.length;
+  const q=run.qs[run.qi], n=run.qs.length;
   const tipo = q.tipo==='vf' ? 'Verdadeiro ou falso' : 'Escolha uma resposta';
   let opts;
   if(q.tipo==='vf') opts = `<div class="opts vf">
@@ -1314,7 +1418,7 @@ function renderQ(){
 }
 function answer(k,btn){
   if(run.done||btn.disabled) return;
-  const q=run.b.perguntas[run.qi], ok = k===q.resposta;
+  const q=run.qs[run.qi], ok = k===q.resposta;
   const all=$$('#mb-card .opt');
   if(ok){
     const pts = run.tent===1 ? PONTOS_1A : PONTOS_2A;
@@ -1339,7 +1443,7 @@ function answer(k,btn){
   hud();
 }
 function feedback(kind, html){
-  const last = run.qi>=run.b.perguntas.length-1;
+  const last = run.qi>=run.qs.length-1;
   $('#fb').innerHTML = `<div class="fb ${kind}"><p>${html}</p><button class="btn" type="button" id="btn-next" data-primary>${last?'Ver resultado':'Próxima pergunta'}</button></div>`;
   $('#btn-next').addEventListener('click',()=>{ Sfx.click(); nextQ(); });
   setTimeout(()=>{ const b=$('#btn-next'); if(b) b.focus({preventScroll:true}); },60);
